@@ -4,17 +4,16 @@
 import pandas as pd
 from yahoofinancials import YahooFinancials
 
-
 assets = ['QQQ', 'GLD', 'VO', 'VB', 'VTI', 'SPY', 'TLT', 'SHY']
 yahoo_financials = YahooFinancials(assets)
 
 data = yahoo_financials.get_historical_price_data(start_date='2000-01-01',
                                                   end_date='2020-12-31',
-                                                  time_interval='daily') # 'weekly'
+                                                  time_interval='daily')  # 'weekly'
 
 for symbol in assets:
-    tsla_df = pd.DataFrame(data[symbol]['prices'])
-    tsla_df = tsla_df.drop('date', axis=1).set_index('formatted_date')
-    # tsla_df.head()
-
-    tsla_df.to_csv(f'../data/{symbol}.csv')  # works
+    df = pd.DataFrame(data[symbol]['prices'])
+    df = df.drop('date', axis=1).set_index('formatted_date')
+    # df.head()
+    df.reindex(columns=['open', 'high', 'low', 'close', 'adjclose', 'volume']) \
+        .to_csv(f'../data/{symbol}.csv')  # works
